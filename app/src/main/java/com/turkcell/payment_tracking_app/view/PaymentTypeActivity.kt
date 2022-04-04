@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import com.turkcell.payment_tracking_app.R
+import com.turkcell.payment_tracking_app.database.PaymentTypeOperation
 import com.turkcell.payment_tracking_app.databinding.ActivityPaymentTypeBinding
 import com.turkcell.payment_tracking_app.model.PaymentType
 import com.turkcell.payment_tracking_app.model.Period
@@ -13,14 +14,13 @@ import com.turkcell.payment_tracking_app.model.Period
 class PaymentTypeActivity : AppCompatActivity() {
     lateinit var binding : ActivityPaymentTypeBinding
     var paymentType : PaymentType? = null
-    var position : Int? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPaymentTypeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         paymentType = intent.getSerializableExtra("paymentType") as PaymentType?
-        position = intent.getIntExtra("position",-1)
 
         //val genders = enumValues<Period>() // bunu dene
         val periods = arrayListOf<String>()
@@ -54,7 +54,8 @@ class PaymentTypeActivity : AppCompatActivity() {
 
             val intentAddPaymentType = Intent()
             intentAddPaymentType.putExtra("paymentType", paymentType)
-            intentAddPaymentType.putExtra("position", position)
+            val yo = PaymentTypeOperation(this)
+            yo.addPaymentType(paymentType!!)
             setResult(RESULT_OK, intentAddPaymentType)
             finish()
         }
