@@ -1,31 +1,33 @@
 package com.turkcell.payment_tracking_app.view
 
 import android.content.Intent
+import android.database.sqlite.SQLiteDatabase
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.turkcell.payment_tracking_app.R
 import com.turkcell.payment_tracking_app.adapter.PaymentTypeAdapter
 import com.turkcell.payment_tracking_app.database.PaymentTypeOperation
 import com.turkcell.payment_tracking_app.databinding.ActivityMainBinding
-import com.turkcell.payment_tracking_app.databinding.ActivityPaymentTypeBinding
 import com.turkcell.payment_tracking_app.model.PaymentType
-import com.turkcell.payment_tracking_app.model.Period
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding : ActivityMainBinding
     var paymentTypeList = ArrayList<PaymentType>()
+    val po = PaymentTypeOperation(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val x = PaymentTypeOperation(this)
-        val y = x.getPaymentTypes()
-        println(y)
-        paymentTypeList = x.getPaymentTypes()
+
+        paymentTypeList = po.getPaymentTypes()
+
+
+
 
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
@@ -38,6 +40,7 @@ class MainActivity : AppCompatActivity() {
             resultLauncher.launch(intent)
         }
     }
+    @RequiresApi(Build.VERSION_CODES.N)
     var resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_CANCELED) {
@@ -47,11 +50,22 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Changes Saved Successfully!", Toast.LENGTH_SHORT).show()
                 val gelenData: Intent? = result.data
                 val paymentType = gelenData!!.getSerializableExtra("paymentType") as PaymentType
+                val isDeleted = gelenData!!.getBooleanExtra("isDeleted",false)
 
                 if (paymentType.id == null) {
-                    paymentType.id = paymentTypeList.size
-                    paymentTypeList.add(paymentType)
-                } else {
+                    //paymentType.id = currentId
+                    //currentId++
+                    //paymentTypeList.add(paymentType)
+
+                }else if(isDeleted){
+
+                    paymentTypeList.removeIf {
+                        it.id == paymentType.id
+                    }
+
+                    po.deletePaymentType(paymentType.id!!)
+                }
+                else {
                     val existingPaymentType = paymentTypeList.filter { it.id == paymentType.id }.first()
                     existingPaymentType.title = paymentType.title
                     existingPaymentType.period = paymentType.period
@@ -59,13 +73,16 @@ class MainActivity : AppCompatActivity() {
                     existingPaymentType.payments = paymentType.payments
                 }
 
-                binding.rwPaymentTypes.adapter?.notifyDataSetChanged()
+
+                paymentTypeList = po.getPaymentTypes()
+                binding.rwPaymentTypes.adapter = PaymentTypeAdapter(this, paymentTypeList, ::itemClick,::addButtonClick)
 
 
-                val x = PaymentTypeOperation(this)
-                val y = x.getPaymentTypes()
-                println(y)
+                //binding.rwPaymentTypes.adapter?.notifyDataSetChanged()
+
+
             }
+
         }
 
     var resultLauncher2 =
@@ -88,6 +105,11 @@ class MainActivity : AppCompatActivity() {
     private fun itemClick(position: Int) {
         val intent = Intent(this, PaymentTypeDetailsActivity::class.java)
         intent.putExtra("paymentType", paymentTypeList.get(position))
+
+        if(paymentTypeList.get(position).id!= null){
+        paymentTypeList.get(position).payments = po.getPaymentsWithId(paymentTypeList.get(position).id)
+        }
+
         resultLauncher.launch(intent)
     }
 

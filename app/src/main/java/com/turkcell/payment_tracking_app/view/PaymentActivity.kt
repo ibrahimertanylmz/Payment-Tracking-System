@@ -17,12 +17,14 @@ class PaymentActivity : AppCompatActivity() {
     var year: Int? = null
     var month: Int? = null
     var day: Int? = null
+    var paymentTypeId : Int? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPaymentBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         paymentType = intent.getSerializableExtra("paymentType") as PaymentType?
+        paymentTypeId = paymentType!!.id
 
         binding.btnSetDate.setOnClickListener {
             val c = Calendar.getInstance()
@@ -48,6 +50,13 @@ class PaymentActivity : AppCompatActivity() {
             payment.date = binding.tvDate.text.toString()
             payment.price = Integer.valueOf(binding.edtPrice.text.toString())
             paymentType!!.payments.add(payment)
+
+
+            val po = PaymentTypeOperation(this)
+            paymentTypeId?.let { it1 -> po.addPayment(payment, it1) }
+
+            println(paymentTypeId)
+
             println(payment)
             val intentAddPayment = Intent()
             intentAddPayment.putExtra("paymentType", paymentType)

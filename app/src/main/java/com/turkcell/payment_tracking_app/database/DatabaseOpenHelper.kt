@@ -9,10 +9,17 @@ class DatabaseOpenHelper(context: Context, name: String, factory: SQLiteDatabase
     override fun onCreate(db: SQLiteDatabase) {
         val sorgu = "CREATE TABLE PaymentType(Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Title TEXT, Period TEXT, PeriodDay INTEGER)"
         db.execSQL(sorgu)
-        val sorgu2 = "CREATE TABLE Payment(Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Date TEXT, Price TEXT, PaymentTypeId INTEGER, FOREIGN KEY(PaymentTypeId) REFERENCES PaymentType(Id))"
+        val sorgu2 = "CREATE TABLE Payment(Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Date TEXT, Price INTEGER, PaymentTypeId INTEGER, FOREIGN KEY(PaymentTypeId) REFERENCES PaymentType(Id) ON DELETE CASCADE)"
         db.execSQL(sorgu2)
     }
 
+    /*override fun onOpen(db: SQLiteDatabase?) {
+        super.onOpen(db)
+        if (!db!!.isReadOnly()) {
+            // Enable foreign key constraints
+            db.execSQL("PRAGMA foreign_keys=ON;");
+        }
+    }*/
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         if (oldVersion == 1){ //tüm versiyonlar için ayrı işlemler yapılmalı
 

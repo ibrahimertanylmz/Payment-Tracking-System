@@ -9,6 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.turkcell.payment_tracking_app.adapter.PaymentAdapter
+import com.turkcell.payment_tracking_app.database.PaymentTypeOperation
 import com.turkcell.payment_tracking_app.databinding.ActivityPaymentTypeDetailsBinding
 import com.turkcell.payment_tracking_app.model.Payment
 import com.turkcell.payment_tracking_app.model.PaymentType
@@ -17,6 +18,7 @@ class PaymentTypeDetailsActivity : AppCompatActivity() {
     lateinit var binding : ActivityPaymentTypeDetailsBinding
     var paymentType : PaymentType? = null
     var payments = ArrayList<Payment>()
+    val po = PaymentTypeOperation(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPaymentTypeDetailsBinding.inflate(layoutInflater)
@@ -67,14 +69,23 @@ class PaymentTypeDetailsActivity : AppCompatActivity() {
                     Toast.makeText(this, "Changes Saved Successfully!", Toast.LENGTH_SHORT).show()
                     val gelenData: Intent? = result.data
                     val paymentTypePlus = gelenData!!.getSerializableExtra("paymentType") as PaymentType
+                    val isDeleted = gelenData.getBooleanExtra("isDeleted",false)
 
-                    payments = paymentTypePlus.payments
-                    paymentType = paymentTypePlus
-                    binding.rwPayments.adapter = PaymentAdapter(this, payments, ::itemClick)
+                    if(isDeleted){
+                        val intentAddPaymentType = Intent()
+                        intentAddPaymentType.putExtra("paymentType", paymentType)
+                        intentAddPaymentType.putExtra("isDeleted",isDeleted)
+                        setResult(RESULT_OK, intentAddPaymentType)
+                        finish()
+                    }else{
+                        payments = paymentTypePlus.payments
+                        paymentType = paymentTypePlus
+                        binding.rwPayments.adapter = PaymentAdapter(this, payments, ::itemClick)
 
-                    binding.tvpaymentTypeTitle.text = paymentType!!.title
-                    binding.tvPaymentTypePeriod.text = paymentType!!.period!!.name
-                    binding.tvPaymentPeriodDay.text = paymentType!!.periodDay.toString()
+                        binding.tvpaymentTypeTitle.text = paymentType!!.title
+                        binding.tvPaymentTypePeriod.text = paymentType!!.period!!.name
+                        binding.tvPaymentPeriodDay.text = paymentType!!.periodDay.toString()
+                    }
 
                 }
             }
@@ -88,6 +99,7 @@ class PaymentTypeDetailsActivity : AppCompatActivity() {
         adb.setTitle("SİL")
         adb.setMessage("Ödemeyi Silmek İstediğinize Emin Misiniz?")
         adb.setPositiveButton("Sil", DialogInterface.OnClickListener { dialog, which ->
+            payments.get(position).id?.let { po.deletePayment(it) }
             payments.removeAt(position)
             binding.rwPayments.adapter = PaymentAdapter(this, payments, ::itemClick)
             deleteItem = true

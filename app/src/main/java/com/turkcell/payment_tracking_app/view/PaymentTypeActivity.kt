@@ -14,6 +14,7 @@ import com.turkcell.payment_tracking_app.model.Period
 class PaymentTypeActivity : AppCompatActivity() {
     lateinit var binding : ActivityPaymentTypeBinding
     var paymentType : PaymentType? = null
+    val po = PaymentTypeOperation(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +43,9 @@ class PaymentTypeActivity : AppCompatActivity() {
 
         binding.btnAdd.setOnClickListener {
 
+            var nullKeep = false
             if (paymentType == null) {
+                nullKeep = true
                 paymentType = PaymentType(binding.edtTitle.text.toString())
             }else{
                 paymentType!!.title = binding.edtTitle.text.toString()
@@ -54,14 +57,28 @@ class PaymentTypeActivity : AppCompatActivity() {
 
             val intentAddPaymentType = Intent()
             intentAddPaymentType.putExtra("paymentType", paymentType)
-            val yo = PaymentTypeOperation(this)
-            yo.addPaymentType(paymentType!!)
+
+
+            if(nullKeep== true){
+                po.addPaymentType(paymentType!!)
+            }else{
+                po.updatePaymentType(paymentType!!)
+            }
+
+
             setResult(RESULT_OK, intentAddPaymentType)
             finish()
         }
 
         binding.btnDelete.setOnClickListener {
             // SİLİNECEK
+            val intentAddPaymentType = Intent()
+            intentAddPaymentType.putExtra("paymentType", paymentType)
+            intentAddPaymentType.putExtra("isDeleted", true)
+            setResult(RESULT_OK, intentAddPaymentType)
+            finish()
+
+            //paymentType!!.id?.let { it1 -> po.deletePaymentType(it1) }
         }
     }
 }
