@@ -13,29 +13,21 @@ import com.turkcell.payment_tracking_app.interactor.PaymentTrackingInteractor
 import com.turkcell.payment_tracking_app.databinding.ActivityPaymentTypeDetailsBinding
 import com.turkcell.payment_tracking_app.model.Payment
 import com.turkcell.payment_tracking_app.model.PaymentType
+import com.turkcell.payment_tracking_app.presenter.PaymentTrackingPresenter
+import com.turkcell.payment_tracking_app.presenter.PaymentTrackingPresenterImpl
 
 class PaymentTypeDetailsActivity : AppCompatActivity() {
     lateinit var binding : ActivityPaymentTypeDetailsBinding
     var paymentType : PaymentType? = null
     var payments = ArrayList<Payment>()
+    internal lateinit var ptPresenter: PaymentTrackingPresenter
     val po = PaymentTrackingInteractor(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPaymentTypeDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        paymentType = intent.getSerializableExtra("paymentType") as PaymentType?
-        payments = paymentType!!.payments
-
-        binding.tvpaymentTypeTitle.text = paymentType!!.title
-        binding.tvPaymentTypePeriod.text = paymentType!!.period!!.name
-        binding.tvPaymentPeriodDay.text = paymentType!!.periodDay.toString()
-
-        val layoutManager = LinearLayoutManager(this)
-        layoutManager.orientation = LinearLayoutManager.VERTICAL
-        binding.rwPayments.layoutManager = layoutManager
-        binding.rwPayments.adapter = PaymentAdapter(this, payments, ::itemClick)
-
+        initializeViews()
 
         binding.btnAddNewPayment.setOnClickListener {
             val intent = Intent(this, PaymentActivity::class.java)
@@ -46,7 +38,6 @@ class PaymentTypeDetailsActivity : AppCompatActivity() {
         binding.btnBack.setOnClickListener {
             val intentAddPaymentType = Intent()
             paymentType!!.payments = payments
-            println(paymentType!!.payments)
             intentAddPaymentType.putExtra("paymentType", paymentType)
             setResult(RESULT_OK, intentAddPaymentType)
             finish()
@@ -73,8 +64,6 @@ class PaymentTypeDetailsActivity : AppCompatActivity() {
 
                     if(isDeleted){
                         val intentAddPaymentType = Intent()
-                        intentAddPaymentType.putExtra("paymentType", paymentType)
-                        intentAddPaymentType.putExtra("isDeleted",isDeleted)
                         setResult(RESULT_OK, intentAddPaymentType)
                         finish()
                     }else{
@@ -90,8 +79,26 @@ class PaymentTypeDetailsActivity : AppCompatActivity() {
                 }
             }
 
+    fun initializeViews(){
+        ptPresenter = PaymentTrackingPresenterImpl(this)
+        ptPresenter.onAttach()
+
+        paymentType = intent.getSerializableExtra("paymentType") as PaymentType?
+        payments = paymentType!!.payments
+
+        binding.tvpaymentTypeTitle.text = paymentType!!.title
+        binding.tvPaymentTypePeriod.text = paymentType!!.period!!.name
+        binding.tvPaymentPeriodDay.text = paymentType!!.periodDay.toString()
+
+        val layoutManager = LinearLayoutManager(this)
+        layoutManager.orientation = LinearLayoutManager.VERTICAL
+        binding.rwPayments.layoutManager = layoutManager
+        binding.rwPayments.adapter = PaymentAdapter(this, payments, ::itemClick)
+    }
+
     private fun itemClick(position: Int) {
         uyariGoster(position)
+        //ptPresenter.onPaymentItemClick(position,payments, binding.rwPayments.adapter as PaymentAdapter, this)
     }
     fun uyariGoster(position: Int): Boolean? {
         var deleteItem : Boolean? = null
