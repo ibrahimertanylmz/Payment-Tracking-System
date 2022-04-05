@@ -40,55 +40,11 @@ class MainActivity : AppCompatActivity() {
             }
             if (result.resultCode == RESULT_OK) {
                 Toast.makeText(this, "Changes Saved Successfully!", Toast.LENGTH_SHORT).show()
-                /*val gelenData: Intent? = result.data
-                val paymentType = gelenData!!.getSerializableExtra("paymentType") as PaymentType
-                val isDeleted = gelenData!!.getBooleanExtra("isDeleted",false)
-
-                if (paymentType.id == null) {
-                    //paymentType.id = currentId
-                    //currentId++
-                    //paymentTypeList.add(paymentType)
-
-                }else if(isDeleted){
-
-                    paymentTypeList.removeIf {
-                        it.id == paymentType.id
-                    }
-
-                    ptInteractor.deletePaymentType(paymentType.id!!)
-                }
-                else {
-                    val existingPaymentType = paymentTypeList.filter { it.id == paymentType.id }.first()
-                    existingPaymentType.title = paymentType.title
-                    existingPaymentType.period = paymentType.period
-                    existingPaymentType.periodDay = paymentType.periodDay
-                    existingPaymentType.payments = paymentType.payments
-                }*/
-
-                //yukarısını sor (getPaymentTypes olayı)
-
-                paymentTypeList = ptPresenter.getPaymentTypes()
+                paymentTypeList = ptPresenter.getPaymentTypes() // interactora gonder
                 binding.rwPaymentTypes.adapter = PaymentTypeAdapter(this, paymentTypeList, ::itemClick,::addButtonClick)
 
             }
         }
-
-    var resultLauncher2 =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == RESULT_CANCELED) {
-                    Toast.makeText(this, "No Changes!", Toast.LENGTH_SHORT).show()
-                }
-                if (result.resultCode == RESULT_OK) {
-                    Toast.makeText(this, "Changes Saved Successfully!", Toast.LENGTH_SHORT).show()
-                    val gelenData: Intent? = result.data
-                    val paymentType = gelenData!!.getSerializableExtra("paymentType") as PaymentType
-                    val existingPaymentType = paymentTypeList.filter { it.id == paymentType.id }.first()
-                    existingPaymentType.payments = paymentType.payments
-                    println(paymentType.payments)
-                    println("x")
-
-                }
-            }
 
     private fun initializeViews(){
         ptPresenter = PaymentTrackingPresenterImpl(this)
@@ -118,6 +74,6 @@ class MainActivity : AppCompatActivity() {
     private fun addButtonClick(position: Int){
         val intent = Intent(this, PaymentActivity::class.java)
         intent.putExtra("paymentType", paymentTypeList.get(position))
-        resultLauncher2.launch(intent)
+        resultLauncher.launch(intent)
     }
 }

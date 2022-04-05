@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper
 //veritabanı ve tablolar ile ilgili yapısal işlemler yapılır
 class DatabaseOpenHelper(context: Context, name: String, factory: SQLiteDatabase.CursorFactory?, version: Int) : SQLiteOpenHelper(context, name, factory, version){
     override fun onCreate(db: SQLiteDatabase) {
+        val s = ("")
         val sorgu = "CREATE TABLE PaymentType(Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Title TEXT, Period TEXT, PeriodDay INTEGER)"
         db.execSQL(sorgu)
         val sorgu2 = "CREATE TABLE Payment(Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Date TEXT, Price INTEGER, PaymentTypeId INTEGER, FOREIGN KEY(PaymentTypeId) REFERENCES PaymentType(Id) ON DELETE CASCADE)"

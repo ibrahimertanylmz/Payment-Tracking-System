@@ -10,10 +10,12 @@ import com.turkcell.payment_tracking_app.interactor.PaymentTrackingInteractor
 import com.turkcell.payment_tracking_app.databinding.ActivityPaymentTypeBinding
 import com.turkcell.payment_tracking_app.model.PaymentType
 import com.turkcell.payment_tracking_app.model.Period
+import com.turkcell.payment_tracking_app.presenter.PaymentTrackingPresenter
 
 class PaymentTypeActivity : AppCompatActivity() {
     lateinit var binding : ActivityPaymentTypeBinding
     var paymentType : PaymentType? = null
+    internal lateinit var ptPresenter: PaymentTrackingPresenter
     val po = PaymentTrackingInteractor(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,11 +26,9 @@ class PaymentTypeActivity : AppCompatActivity() {
         paymentType = intent.getSerializableExtra("paymentType") as PaymentType?
 
         //val genders = enumValues<Period>() // bunu dene
-        val periods = arrayListOf<String>()
+
         val pers = enumValues<Period>()
-        enumValues<Period>().forEach {
-            periods.add(it.name)
-        }
+
 
         val adap : ArrayAdapter<Period> = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, pers)
         binding.spinnerPeriod.adapter = adap
@@ -78,7 +78,10 @@ class PaymentTypeActivity : AppCompatActivity() {
             setResult(RESULT_OK, intentAddPaymentType)
             finish()
 
-            //paymentType!!.id?.let { it1 -> po.deletePaymentType(it1) }
+            paymentType!!.id?.let { it1 -> po.deletePaymentType(it1) }
         }
+    }
+    private fun initializeViews(){
+
     }
 }

@@ -101,7 +101,8 @@ class PaymentTypeDetailsActivity : AppCompatActivity() {
         adb.setPositiveButton("Sil", DialogInterface.OnClickListener { dialog, which ->
             payments.get(position).id?.let { po.deletePayment(it) }
             payments.removeAt(position)
-            binding.rwPayments.adapter = PaymentAdapter(this, payments, ::itemClick)
+            //binding.rwPayments.adapter = PaymentAdapter(this, payments, ::itemClick)
+            binding.rwPayments.adapter!!.notifyDataSetChanged()
             deleteItem = true
         })
         adb.setNegativeButton("Vazgeç", DialogInterface.OnClickListener { dialog, which ->
