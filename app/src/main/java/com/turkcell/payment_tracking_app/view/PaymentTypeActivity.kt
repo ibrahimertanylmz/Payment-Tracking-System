@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import com.turkcell.payment_tracking_app.R
-import com.turkcell.payment_tracking_app.database.PaymentTypeOperation
+import com.turkcell.payment_tracking_app.interactor.PaymentTrackingInteractor
 import com.turkcell.payment_tracking_app.databinding.ActivityPaymentTypeBinding
 import com.turkcell.payment_tracking_app.model.PaymentType
 import com.turkcell.payment_tracking_app.model.Period
@@ -14,7 +14,7 @@ import com.turkcell.payment_tracking_app.model.Period
 class PaymentTypeActivity : AppCompatActivity() {
     lateinit var binding : ActivityPaymentTypeBinding
     var paymentType : PaymentType? = null
-    val po = PaymentTypeOperation(this)
+    val po = PaymentTrackingInteractor(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

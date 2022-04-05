@@ -9,7 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.turkcell.payment_tracking_app.adapter.PaymentAdapter
-import com.turkcell.payment_tracking_app.database.PaymentTypeOperation
+import com.turkcell.payment_tracking_app.interactor.PaymentTrackingInteractor
 import com.turkcell.payment_tracking_app.databinding.ActivityPaymentTypeDetailsBinding
 import com.turkcell.payment_tracking_app.model.Payment
 import com.turkcell.payment_tracking_app.model.PaymentType
@@ -18,7 +18,7 @@ class PaymentTypeDetailsActivity : AppCompatActivity() {
     lateinit var binding : ActivityPaymentTypeDetailsBinding
     var paymentType : PaymentType? = null
     var payments = ArrayList<Payment>()
-    val po = PaymentTypeOperation(this)
+    val po = PaymentTrackingInteractor(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPaymentTypeDetailsBinding.inflate(layoutInflater)

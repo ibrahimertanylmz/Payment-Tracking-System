@@ -1,68 +1,71 @@
 package com.turkcell.payment_tracking_app.view
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.turkcell.payment_tracking_app.database.PaymentTypeOperation
+import com.turkcell.payment_tracking_app.interactor.PaymentTrackingInteractor
 import com.turkcell.payment_tracking_app.databinding.ActivityPaymentBinding
 import com.turkcell.payment_tracking_app.model.Payment
 import com.turkcell.payment_tracking_app.model.PaymentType
+import com.turkcell.payment_tracking_app.presenter.PaymentTrackingPresenter
+import com.turkcell.payment_tracking_app.presenter.PaymentTrackingPresenterImpl
+import java.text.SimpleDateFormat
 import java.util.*
 
 
 class PaymentActivity : AppCompatActivity() {
     lateinit var binding : ActivityPaymentBinding
+    internal lateinit var ptPresenter: PaymentTrackingPresenter
     var paymentType : PaymentType? = null
-    var year: Int? = null
-    var month: Int? = null
-    var day: Int? = null
     var paymentTypeId : Int? = null
+    val calendar = Calendar.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPaymentBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        paymentType = intent.getSerializableExtra("paymentType") as PaymentType?
-        paymentTypeId = paymentType!!.id
+        initializeViews()
 
         binding.btnSetDate.setOnClickListener {
-            val c = Calendar.getInstance()
-            year = c.get(Calendar.YEAR)
-            month = c.get(Calendar.MONTH)
-            day = c.get(Calendar.DAY_OF_MONTH)
-
-
-            val dpd = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-
-                // Display Selected date in textbox
-                binding.tvDate.setText("" + dayOfMonth + "." + monthOfYear + "." + year)
-
-            }, year!!, month!!, day!!)
-
-            // binding.tvDate.text = System.currentTimeMillis().toString() o anki tarihi ayarla
-            dpd.getDatePicker().setMaxDate(System.currentTimeMillis());
-            dpd.show()
+            setDateButtonClick()
         }
 
         binding.btnSave.setOnClickListener {
-            val payment = Payment()
-            payment.date = binding.tvDate.text.toString()
-            payment.price = Integer.valueOf(binding.edtPrice.text.toString())
-            paymentType!!.payments.add(payment)
-
-
-            val po = PaymentTypeOperation(this)
-            paymentTypeId?.let { it1 -> po.addPayment(payment, it1) }
-
-            println(paymentTypeId)
-
-            println(payment)
-            val intentAddPayment = Intent()
-            intentAddPayment.putExtra("paymentType", paymentType)
-            setResult(RESULT_OK, intentAddPayment)
-            finish()
+            onSavePaymentButtonClick()
         }
-
     }
+
+    private fun initializeViews(){
+        ptPresenter.onAttach()
+        ptPresenter = PaymentTrackingPresenterImpl(this)
+        paymentType = intent.getSerializableExtra("paymentType") as PaymentType?
+        paymentTypeId = paymentType!!.id
+        binding.tvDate.text = ("" +calendar.get(Calendar.DAY_OF_MONTH) +"."+ calendar.get(Calendar.MONTH) +"."+ calendar.get(Calendar.YEAR)) // HATA VAR DUZELT
+    }
+
+    private fun onSavePaymentButtonClick() {
+        ptPresenter.onSavePaymentCondition(paymentType!!,binding.tvDate.text.toString(),binding.edtPrice.text.toString())
+        val intentAddPayment = Intent()
+        intentAddPayment.putExtra("paymentType", paymentType)
+        setResult(RESULT_OK, intentAddPayment)
+        finish()
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setDateButtonClick(){
+        datePickerDialogShow()
+    }
+
+    private fun datePickerDialogShow(){
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val dpd = DatePickerDialog(this, { view, year, monthOfYear, dayOfMonth ->
+            binding.tvDate.text = "$dayOfMonth.${monthOfYear+1}.$year"
+        }, year, month, day)
+        dpd.getDatePicker().setMaxDate(System.currentTimeMillis());
+        dpd.show()
+    }
+
 }

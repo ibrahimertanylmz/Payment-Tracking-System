@@ -1,15 +1,16 @@
-package com.turkcell.payment_tracking_app.database
+package com.turkcell.payment_tracking_app.interactor
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import com.turkcell.payment_tracking_app.database.DatabaseOpenHelper
 import com.turkcell.payment_tracking_app.model.Payment
 import com.turkcell.payment_tracking_app.model.PaymentType
 import com.turkcell.payment_tracking_app.model.Period
 
-class PaymentTypeOperation(context: Context) {
+class PaymentTrackingInteractor(context: Context) {
     //PRAGMA foreign_keys = ON
     var PaymentTypeDatabase : SQLiteDatabase? = null
     var dbOpenHelper : DatabaseOpenHelper
