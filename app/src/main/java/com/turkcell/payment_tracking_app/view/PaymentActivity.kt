@@ -37,8 +37,8 @@ class PaymentActivity : AppCompatActivity() {
     }
 
     private fun initializeViews(){
-        ptPresenter.onAttach()
         ptPresenter = PaymentTrackingPresenterImpl(this)
+        ptPresenter.onAttach()
         paymentType = intent.getSerializableExtra("paymentType") as PaymentType?
         paymentTypeId = paymentType!!.id
         binding.tvDate.text = ("" +calendar.get(Calendar.DAY_OF_MONTH) +"."+ calendar.get(Calendar.MONTH) +"."+ calendar.get(Calendar.YEAR)) // HATA VAR DUZELT
