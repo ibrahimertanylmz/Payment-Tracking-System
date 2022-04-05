@@ -2,8 +2,11 @@ package com.turkcell.payment_tracking_app.presenter
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.turkcell.payment_tracking_app.adapter.PaymentAdapter
 import com.turkcell.payment_tracking_app.interactor.PaymentTrackingInteractor
 import com.turkcell.payment_tracking_app.model.Payment
 import com.turkcell.payment_tracking_app.model.PaymentType
@@ -53,16 +56,46 @@ class PaymentTrackingPresenterImpl(internal var context: Context): PaymentTracki
         }
     }
 
-    override fun addPaymentType(paymentType: PaymentType){
+
+
+    override fun onPaymentItemClick(position: Int, payments: ArrayList<Payment>, adapter: PaymentAdapter, context: Context) {
+
+    }
+
+    override fun onDeletePaymentCondition(paymentType: PaymentType) {
+        deletePaymentType(paymentType)
+    }
+
+    private fun addPaymentType(paymentType: PaymentType){
         ptInteractor.addPaymentType(paymentType)
     }
 
-    override fun updatePaymentType(paymentType: PaymentType){
+    private fun updatePaymentType(paymentType: PaymentType){
         ptInteractor.updatePaymentType(paymentType)
     }
 
-    override fun deletePaymentType(paymentType: PaymentType){
-        ptInteractor.deletePayment(paymentType.id!!)
+    private fun deletePaymentType(paymentType: PaymentType){
+        ptInteractor.deletePaymentType(paymentType.id!!)
+    }
+
+    private fun showAlertDeletePayment(position: Int, payments: ArrayList<Payment>, adapter: PaymentAdapter, context: Context): Boolean? {
+        var deleteItem : Boolean? = null
+        val adb : AlertDialog.Builder = AlertDialog.Builder(context)
+        adb.setTitle("SİL")
+        adb.setMessage("Ödemeyi Silmek İstediğinize Emin Misiniz?")
+        adb.setPositiveButton("Sil", DialogInterface.OnClickListener { dialog, which ->
+            payments.get(position).id?.let { ptInteractor.deletePayment(it) }
+            payments.removeAt(position)
+            //binding.rwPayments.adapter = PaymentAdapter(this, payments, ::itemClick)
+            adapter.notifyDataSetChanged()
+            deleteItem = true
+        })
+        adb.setNegativeButton("Vazgeç", DialogInterface.OnClickListener { dialog, which ->
+            deleteItem = false
+        })
+        val uyari : AlertDialog = adb.create()
+        uyari.show()
+        return deleteItem
     }
 
 
