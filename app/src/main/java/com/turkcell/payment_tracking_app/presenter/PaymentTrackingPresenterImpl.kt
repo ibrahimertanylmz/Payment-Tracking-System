@@ -1,6 +1,5 @@
 package com.turkcell.payment_tracking_app.presenter
 
-import android.app.DatePickerDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -59,7 +58,7 @@ class PaymentTrackingPresenterImpl(internal var context: Context): PaymentTracki
 
 
     override fun onPaymentItemClick(position: Int, payments: ArrayList<Payment>, adapter: PaymentAdapter, context: Context) {
-
+        showAlertDeletePayment(position,payments,adapter,context)
     }
 
     override fun onDeletePaymentCondition(paymentType: PaymentType) {
@@ -77,6 +76,9 @@ class PaymentTrackingPresenterImpl(internal var context: Context): PaymentTracki
     private fun deletePaymentType(paymentType: PaymentType){
         ptInteractor.deletePaymentType(paymentType.id!!)
     }
+    private fun deletePayment(paymentType: Payment){
+        ptInteractor.deletePayment(paymentType.id!!)
+    }
 
     private fun showAlertDeletePayment(position: Int, payments: ArrayList<Payment>, adapter: PaymentAdapter, context: Context): Boolean? {
         var deleteItem : Boolean? = null
@@ -84,7 +86,8 @@ class PaymentTrackingPresenterImpl(internal var context: Context): PaymentTracki
         adb.setTitle("SİL")
         adb.setMessage("Ödemeyi Silmek İstediğinize Emin Misiniz?")
         adb.setPositiveButton("Sil", DialogInterface.OnClickListener { dialog, which ->
-            payments.get(position).id?.let { ptInteractor.deletePayment(it) }
+            //payments.get(position).id?.let { ptInteractor.deletePayment(it) }
+            deletePayment(payments.get(position))
             payments.removeAt(position)
             //binding.rwPayments.adapter = PaymentAdapter(this, payments, ::itemClick)
             adapter.notifyDataSetChanged()

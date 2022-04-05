@@ -32,7 +32,6 @@ class PaymentTypeActivity : AppCompatActivity() {
 
         binding.btnDelete.setOnClickListener {
             onDeleteButtonClick()
-
         }
     }
     private fun initializeViews(){
@@ -59,14 +58,11 @@ class PaymentTypeActivity : AppCompatActivity() {
     }
 
     private fun onDeleteButtonClick() {
+        ptPresenter.onDeletePaymentCondition(paymentType!!)
         val intentAddPaymentType = Intent()
         intentAddPaymentType.putExtra("paymentType", paymentType)
         intentAddPaymentType.putExtra("isDeleted", true)
         setResult(RESULT_OK, intentAddPaymentType)
         finish()
-
-
-        //paymentType!!.id?.let { it1 -> ptPresenter.deletePaymentType(it1) }
-        paymentType!!.id?.let { it1 -> po.deletePaymentType(it1) }
     }
 }

@@ -97,26 +97,6 @@ class PaymentTypeDetailsActivity : AppCompatActivity() {
     }
 
     private fun itemClick(position: Int) {
-        uyariGoster(position)
-        //ptPresenter.onPaymentItemClick(position,payments, binding.rwPayments.adapter as PaymentAdapter, this)
-    }
-    fun uyariGoster(position: Int): Boolean? {
-        var deleteItem : Boolean? = null
-        val adb : AlertDialog.Builder = AlertDialog.Builder(this)
-        adb.setTitle("SİL")
-        adb.setMessage("Ödemeyi Silmek İstediğinize Emin Misiniz?")
-        adb.setPositiveButton("Sil", DialogInterface.OnClickListener { dialog, which ->
-            payments.get(position).id?.let { po.deletePayment(it) }
-            payments.removeAt(position)
-            //binding.rwPayments.adapter = PaymentAdapter(this, payments, ::itemClick)
-            binding.rwPayments.adapter!!.notifyDataSetChanged()
-            deleteItem = true
-        })
-        adb.setNegativeButton("Vazgeç", DialogInterface.OnClickListener { dialog, which ->
-            deleteItem = false
-        })
-        val uyari : AlertDialog = adb.create()
-        uyari.show()
-        return deleteItem
+        ptPresenter.onPaymentItemClick(position,payments, binding.rwPayments.adapter as PaymentAdapter, this)
     }
 }
