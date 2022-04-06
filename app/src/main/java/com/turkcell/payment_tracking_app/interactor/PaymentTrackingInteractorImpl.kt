@@ -11,7 +11,7 @@ import com.turkcell.payment_tracking_app.model.PaymentType
 import com.turkcell.payment_tracking_app.model.Period
 
 class PaymentTrackingInteractorImpl(context: Context): PaymentTrackingInteractor {
-    //PRAGMA foreign_keys = ON
+
     private var PaymentTypeDatabase : SQLiteDatabase? = null
     private var dbOpenHelper : DatabaseOpenHelper
 
