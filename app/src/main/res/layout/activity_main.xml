@@ -4,17 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#EFC8AB"
     tools:context=".view.MainActivity">
+
+    <TextView
+        android:id="@+id/tvTitleBarr"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:background="#DF8C4D"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="Ödeme Takip Sistemi"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnAddPaymentType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/round_style"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:text="Yeni Ödeme Tipi Ekle"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:backgroundTint="#DF8C4D"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTitleBarr" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rwPaymentTypes"

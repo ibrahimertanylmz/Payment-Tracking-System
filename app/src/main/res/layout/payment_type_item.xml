@@ -26,10 +26,11 @@
 
     <TextView
         android:id="@+id/tvPeriod"
-        android:layout_width="wrap_content"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="70dp"
         android:layout_marginRight="70dp"
+        android:gravity="center"
         android:text="Period"
         android:textColor="#FFFFFF"
         android:textSize="14sp"
@@ -39,10 +40,11 @@
 
     <TextView
         android:id="@+id/tvPeriodDay"
-        android:layout_width="wrap_content"
+        android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
+        android:gravity="center"
         android:text="day"
         android:textColor="#FFFFFF"
         android:textSize="14sp"
@@ -59,7 +61,7 @@
         android:background="@drawable/layout_bg"
         android:elevation="4dp"
         android:text="+"
-        android:textColor="#E15C6D"
+        android:textColor="#69E15C"
         app:layout_constraintBottom_toBottomOf="@+id/tvTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tvTitle" />
