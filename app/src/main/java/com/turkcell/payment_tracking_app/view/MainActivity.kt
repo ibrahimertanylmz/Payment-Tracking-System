@@ -33,12 +33,8 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.N)
     var resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "No Changes!", Toast.LENGTH_SHORT).show()
-            }
             if (result.resultCode == RESULT_OK) {
-                Toast.makeText(this, "Changes Saved Successfully!", Toast.LENGTH_SHORT).show()
-                paymentTypeList = ptPresenter.getPaymentTypes() // interactora gonder
+                paymentTypeList = ptPresenter.getPaymentTypes()
                 binding.rwPaymentTypes.adapter = PaymentTypeAdapter(this, paymentTypeList, ::itemClick,::addButtonClick)
 
             }
