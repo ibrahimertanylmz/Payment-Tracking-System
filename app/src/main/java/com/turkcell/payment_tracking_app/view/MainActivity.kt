@@ -9,7 +9,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.turkcell.payment_tracking_app.adapter.PaymentTypeAdapter
-import com.turkcell.payment_tracking_app.interactor.PaymentTrackingInteractor
 import com.turkcell.payment_tracking_app.databinding.ActivityMainBinding
 import com.turkcell.payment_tracking_app.model.PaymentType
 import com.turkcell.payment_tracking_app.presenter.PaymentTrackingPresenter

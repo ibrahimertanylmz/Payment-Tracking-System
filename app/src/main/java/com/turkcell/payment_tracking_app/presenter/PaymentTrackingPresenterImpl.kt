@@ -9,6 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import com.turkcell.payment_tracking_app.R
 import com.turkcell.payment_tracking_app.adapter.PaymentAdapter
 import com.turkcell.payment_tracking_app.interactor.PaymentTrackingInteractor
+import com.turkcell.payment_tracking_app.interactor.PaymentTrackingInteractorImpl
 import com.turkcell.payment_tracking_app.model.Payment
 import com.turkcell.payment_tracking_app.model.PaymentType
 import com.turkcell.payment_tracking_app.model.Period
@@ -20,7 +21,7 @@ import kotlin.collections.ArrayList
 class PaymentTrackingPresenterImpl(internal var context: Context): PaymentTrackingPresenter {
     private lateinit var ptInteractor : PaymentTrackingInteractor
     override fun onAttach() {
-        ptInteractor = PaymentTrackingInteractor(context)
+        ptInteractor = PaymentTrackingInteractorImpl(context)
     }
 
     override fun getPaymentTypes() : ArrayList<PaymentType>{

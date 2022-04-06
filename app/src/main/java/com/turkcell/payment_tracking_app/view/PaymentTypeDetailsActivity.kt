@@ -3,11 +3,9 @@ package com.turkcell.payment_tracking_app.view
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.turkcell.payment_tracking_app.adapter.PaymentAdapter
-import com.turkcell.payment_tracking_app.interactor.PaymentTrackingInteractor
 import com.turkcell.payment_tracking_app.databinding.ActivityPaymentTypeDetailsBinding
 import com.turkcell.payment_tracking_app.model.Payment
 import com.turkcell.payment_tracking_app.model.PaymentType

@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import com.turkcell.payment_tracking_app.R
-import com.turkcell.payment_tracking_app.interactor.PaymentTrackingInteractor
 import com.turkcell.payment_tracking_app.databinding.ActivityPaymentTypeBinding
 import com.turkcell.payment_tracking_app.model.PaymentType
 import com.turkcell.payment_tracking_app.model.Period

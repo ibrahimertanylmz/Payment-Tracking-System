@@ -6,13 +6,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.turkcell.payment_tracking_app.interactor.PaymentTrackingInteractor
 import com.turkcell.payment_tracking_app.databinding.ActivityPaymentBinding
-import com.turkcell.payment_tracking_app.model.Payment
 import com.turkcell.payment_tracking_app.model.PaymentType
 import com.turkcell.payment_tracking_app.presenter.PaymentTrackingPresenter
 import com.turkcell.payment_tracking_app.presenter.PaymentTrackingPresenterImpl
-import java.text.SimpleDateFormat
 import java.util.*
 
 
