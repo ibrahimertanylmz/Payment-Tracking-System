@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Payment-Tracking-App</string>
     <string name="txt_edit">Kaydet</string>
+    <string name="empty_title_toast">Başlık alanı boş bırakılamaz!</string>
+    <string name="period_not_number_toast">Periyot günü pozitif bir sayı olmalıdır!</string>
+    <string name="weekly_period_day_toast">Haftalık periyot için günler 1-7 arasında olabilir!</string>
+    <string name="mothly_period_day_toast">Aylık periyot için günler 1-30 arasında olabilir!</string>
+    <string name="yearly_period_day_toast">Yıllık periyot için günler 1-365 arasında olabilir!</string>
 </resources>

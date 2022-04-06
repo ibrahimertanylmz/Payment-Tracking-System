@@ -50,9 +50,11 @@ class PaymentTypeActivity : AppCompatActivity() {
 
     private fun onAddButtonClick(){
         val intentAddPaymentType = Intent()
-        ptPresenter.onAddPaymentTypeButtonClick(paymentType,binding.edtTitle.text.toString(),binding.spinnerPeriod.selectedItem as Period, binding.edtPeriodDay.text.toString(), intentAddPaymentType)
-        setResult(RESULT_OK, intentAddPaymentType)
-        finish()
+        val isValid = ptPresenter.onAddPaymentTypeButtonClick(paymentType,binding.edtTitle.text.toString(),binding.spinnerPeriod.selectedItem as Period, binding.edtPeriodDay.text.toString(), intentAddPaymentType,this)
+        if (isValid){
+            setResult(RESULT_OK, intentAddPaymentType)
+            finish()
+        }
     }
 
     private fun onDeleteButtonClick() {
