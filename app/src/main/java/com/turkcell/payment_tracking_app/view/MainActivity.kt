@@ -17,7 +17,7 @@ import com.turkcell.payment_tracking_app.presenter.PaymentTrackingPresenterImpl
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding : ActivityMainBinding
-    internal lateinit var ptPresenter: PaymentTrackingPresenter
+    private lateinit var ptPresenter: PaymentTrackingPresenter
     var paymentTypeList = ArrayList<PaymentType>()
     val ptInteractor = PaymentTrackingInteractor(this)
     override fun onCreate(savedInstanceState: Bundle?) {

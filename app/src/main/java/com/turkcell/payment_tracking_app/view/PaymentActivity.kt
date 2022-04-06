@@ -17,7 +17,7 @@ import java.util.*
 
 class PaymentActivity : AppCompatActivity() {
     lateinit var binding : ActivityPaymentBinding
-    internal lateinit var ptPresenter: PaymentTrackingPresenter
+    private lateinit var ptPresenter: PaymentTrackingPresenter
     var paymentType : PaymentType? = null
     var paymentTypeId : Int? = null
     val calendar = Calendar.getInstance()

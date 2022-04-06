@@ -16,9 +16,7 @@ import com.turkcell.payment_tracking_app.presenter.PaymentTrackingPresenterImpl
 class PaymentTypeActivity : AppCompatActivity() {
     lateinit var binding : ActivityPaymentTypeBinding
     var paymentType : PaymentType? = null
-    internal lateinit var ptPresenter: PaymentTrackingPresenter
-    val po = PaymentTrackingInteractor(this)
-
+    private lateinit var ptPresenter: PaymentTrackingPresenter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPaymentTypeBinding.inflate(layoutInflater)
