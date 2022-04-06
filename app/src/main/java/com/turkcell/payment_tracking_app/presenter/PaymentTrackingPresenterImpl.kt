@@ -1,5 +1,6 @@
 package com.turkcell.payment_tracking_app.presenter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -11,12 +12,13 @@ import com.turkcell.payment_tracking_app.interactor.PaymentTrackingInteractor
 import com.turkcell.payment_tracking_app.model.Payment
 import com.turkcell.payment_tracking_app.model.PaymentType
 import com.turkcell.payment_tracking_app.model.Period
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 
 class PaymentTrackingPresenterImpl(internal var context: Context): PaymentTrackingPresenter {
-    internal lateinit var ptInteractor : PaymentTrackingInteractor
+    private lateinit var ptInteractor : PaymentTrackingInteractor
     override fun onAttach() {
         ptInteractor = PaymentTrackingInteractor(context)
     }
@@ -25,12 +27,21 @@ class PaymentTrackingPresenterImpl(internal var context: Context): PaymentTracki
         return ptInteractor.getPaymentTypes()
     }
 
-    override fun onSavePaymentCondition(paymentType: PaymentType, date: String, price: String){
-        val payment = Payment()
-        payment.date = date
-        payment.price = Integer.valueOf(price)
-        paymentType.payments.add(payment)
-        paymentType.id?.let { ptInteractor.addPayment(payment, it) }
+    override fun onSavePaymentCondition(paymentType: PaymentType, date: String, price: String) : Boolean {
+        if(checkPaymentPrice(price)){
+            val payment = Payment()
+            payment.date = date
+            payment.price = Integer.valueOf(price)
+            paymentType.payments.add(payment)
+            paymentType.id?.let { ptInteractor.addPayment(payment, it) }
+            return true
+        }else{
+            return false
+        }
+    }
+
+    private fun checkPaymentPrice(price: String) : Boolean{
+        return isNumber(price)
     }
 
     override fun onAddPaymentTypeButtonClick(paymentType: PaymentType?, title: String, period: Period, periodDay: String, intent: Intent,context: Context) : Boolean {
@@ -66,6 +77,12 @@ class PaymentTrackingPresenterImpl(internal var context: Context): PaymentTracki
         showAlertDeletePayment(position,payments,adapter,context)
     }
 
+    override fun onPaymentTypeItemClick(position: Int, paymentTypeList: ArrayList<PaymentType>) {
+        if(paymentTypeList.get(position).id!= null){
+            paymentTypeList.get(position).payments = ptInteractor.getPaymentsWithId(paymentTypeList.get(position).id)
+        }
+    }
+
     override fun onDeletePaymentCondition(paymentType: PaymentType) {
         deletePaymentType(paymentType)
     }
@@ -76,6 +93,13 @@ class PaymentTrackingPresenterImpl(internal var context: Context): PaymentTracki
         paymentType.title = updatedPaymentType.title
         paymentType.period = updatedPaymentType.period
         paymentType.periodDay = updatedPaymentType.periodDay
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    override fun getCurrentDate(): String {
+        val date = Calendar.getInstance().time
+        val sdf = SimpleDateFormat("dd.MM.yyyy")
+        return sdf.format(date)
     }
 
     private fun addPaymentType(paymentType: PaymentType){
@@ -147,6 +171,5 @@ class PaymentTrackingPresenterImpl(internal var context: Context): PaymentTracki
         uyari.show()
         return deleteItem
     }
-
 
 }

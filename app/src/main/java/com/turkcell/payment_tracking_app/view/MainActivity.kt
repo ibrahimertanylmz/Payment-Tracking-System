@@ -19,7 +19,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding : ActivityMainBinding
     private lateinit var ptPresenter: PaymentTrackingPresenter
     var paymentTypeList = ArrayList<PaymentType>()
-    val ptInteractor = PaymentTrackingInteractor(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -64,10 +63,7 @@ class MainActivity : AppCompatActivity() {
     private fun itemClick(position: Int) {
         val intent = Intent(this, PaymentTypeDetailsActivity::class.java)
         intent.putExtra("paymentType", paymentTypeList.get(position))
-
-        if(paymentTypeList.get(position).id!= null){ // SOR!! bu şekilde mi başta mı çekilmeli
-        paymentTypeList.get(position).payments = ptInteractor.getPaymentsWithId(paymentTypeList.get(position).id)
-        }
+        ptPresenter.onPaymentTypeItemClick(position, paymentTypeList)
         resultLauncher.launch(intent)
     }
 

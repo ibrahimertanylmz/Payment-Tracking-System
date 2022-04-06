@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.turkcell.payment_tracking_app.interactor.PaymentTrackingInteractor
 import com.turkcell.payment_tracking_app.databinding.ActivityPaymentBinding
@@ -41,22 +42,25 @@ class PaymentActivity : AppCompatActivity() {
         ptPresenter.onAttach()
         paymentType = intent.getSerializableExtra("paymentType") as PaymentType?
         paymentTypeId = paymentType!!.id
-        binding.tvDate.text = ("" +calendar.get(Calendar.DAY_OF_MONTH) +"."+ calendar.get(Calendar.MONTH) +"."+ calendar.get(Calendar.YEAR)) // simpleDateFormat ile yaparsan daha mantıklı
+        binding.tvDate.text = ptPresenter.getCurrentDate()
     }
 
     private fun onSavePaymentButtonClick() {
-        ptPresenter.onSavePaymentCondition(paymentType!!,binding.tvDate.text.toString(),binding.edtPrice.text.toString())
-        val intentAddPayment = Intent()
-        intentAddPayment.putExtra("paymentType", paymentType)
-        setResult(RESULT_OK, intentAddPayment)
-        finish()
+        if(ptPresenter.onSavePaymentCondition(paymentType!!,binding.tvDate.text.toString(),binding.edtPrice.text.toString())){
+            val intentAddPayment = Intent()
+            intentAddPayment.putExtra("paymentType", paymentType)
+            setResult(RESULT_OK, intentAddPayment)
+            finish()
+        }else{
+            Toast.makeText(this,"Ödeme tutarı tamsayı olmalıdır",Toast.LENGTH_SHORT).show()
+        }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setDateButtonClick(){
         datePickerDialogShow()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun datePickerDialogShow(){
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
