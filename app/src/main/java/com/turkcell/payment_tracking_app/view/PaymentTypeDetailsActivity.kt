@@ -46,7 +46,7 @@ class PaymentTypeDetailsActivity : AppCompatActivity() {
 
     }
 
-    var resultLauncher =
+    private var resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == RESULT_OK) {
                     val gelenData: Intent? = result.data
@@ -63,13 +63,12 @@ class PaymentTypeDetailsActivity : AppCompatActivity() {
                 }
             }
 
-    fun initializeViews(){
+    private fun initializeViews(){
         ptPresenter = PaymentTrackingPresenterImpl(this)
         ptPresenter.onAttach()
 
         paymentType = intent.getSerializableExtra("paymentType") as PaymentType?
         payments = paymentType!!.payments
-
         binding.tvpaymentTypeTitle.text = paymentType!!.title
         binding.tvPaymentTypePeriod.text = paymentType!!.period!!.name
         binding.tvPaymentPeriodDay.text = paymentType!!.periodDay.toString()

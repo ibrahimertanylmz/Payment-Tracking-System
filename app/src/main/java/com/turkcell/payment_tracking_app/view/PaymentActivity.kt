@@ -23,6 +23,7 @@ class PaymentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPaymentBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         initializeViews()
 
         binding.btnSetDate.setOnClickListener {
