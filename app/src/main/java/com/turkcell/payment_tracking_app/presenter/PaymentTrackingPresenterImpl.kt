@@ -70,6 +70,14 @@ class PaymentTrackingPresenterImpl(internal var context: Context): PaymentTracki
         deletePaymentType(paymentType)
     }
 
+    override fun onResultPaymentAdded(paymentType: PaymentType, updatedPaymentType: PaymentType, payments: ArrayList<Payment>) {
+        payments.clear()
+        payments.addAll(updatedPaymentType.payments)
+        paymentType.title = updatedPaymentType.title
+        paymentType.period = updatedPaymentType.period
+        paymentType.periodDay = updatedPaymentType.periodDay
+    }
+
     private fun addPaymentType(paymentType: PaymentType){
         ptInteractor.addPaymentType(paymentType)
     }
@@ -86,7 +94,6 @@ class PaymentTrackingPresenterImpl(internal var context: Context): PaymentTracki
     }
 
     private fun checkPaymentTypeValues(title: String, period: Period, periodDay: String, context: Context) : Boolean{
-
         if(title.isEmpty() || title.isBlank()){
             Toast.makeText(context, context.getString(R.string.empty_title_toast), Toast.LENGTH_SHORT).show()
         }else if(!isNumber(periodDay)){
@@ -128,10 +135,8 @@ class PaymentTrackingPresenterImpl(internal var context: Context): PaymentTracki
         adb.setTitle("SİL")
         adb.setMessage("Ödemeyi Silmek İstediğinize Emin Misiniz?")
         adb.setPositiveButton("Sil", DialogInterface.OnClickListener { dialog, which ->
-            //payments.get(position).id?.let { ptInteractor.deletePayment(it) }
             deletePayment(payments.get(position))
             payments.removeAt(position)
-            //binding.rwPayments.adapter = PaymentAdapter(this, payments, ::itemClick)
             adapter.notifyDataSetChanged()
             deleteItem = true
         })

@@ -50,29 +50,18 @@ class PaymentTypeDetailsActivity : AppCompatActivity() {
 
     var resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == RESULT_CANCELED) {
-                    Toast.makeText(this, "No Changes!", Toast.LENGTH_SHORT).show()
-                }
                 if (result.resultCode == RESULT_OK) {
-                    Toast.makeText(this, "Changes Saved Successfully!", Toast.LENGTH_SHORT).show()
                     val gelenData: Intent? = result.data
-                    val paymentTypePlus = gelenData!!.getSerializableExtra("paymentType") as PaymentType
+                    val updatedPaymentType = gelenData!!.getSerializableExtra("paymentType") as PaymentType
                     val isDeleted = gelenData.getBooleanExtra("isDeleted",false)
-
                     if(isDeleted){
                         val intentAddPaymentType = Intent()
                         setResult(RESULT_OK, intentAddPaymentType)
                         finish()
                     }else{
-                        payments = paymentTypePlus.payments
-                        paymentType = paymentTypePlus
-                        binding.rwPayments.adapter = PaymentAdapter(this, payments, ::itemClick)
-
-                        binding.tvpaymentTypeTitle.text = paymentType!!.title
-                        binding.tvPaymentTypePeriod.text = paymentType!!.period!!.name
-                        binding.tvPaymentPeriodDay.text = paymentType!!.periodDay.toString()
+                        ptPresenter.onResultPaymentAdded(paymentType!!,updatedPaymentType,payments)
+                        updateViewsOnResult()
                     }
-
                 }
             }
 
@@ -91,6 +80,13 @@ class PaymentTypeDetailsActivity : AppCompatActivity() {
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         binding.rwPayments.layoutManager = layoutManager
         binding.rwPayments.adapter = PaymentAdapter(this, payments, ::itemClick)
+    }
+
+    private fun updateViewsOnResult() {
+        binding.rwPayments.adapter = PaymentAdapter(this, payments, ::itemClick)
+        binding.tvpaymentTypeTitle.text = paymentType!!.title
+        binding.tvPaymentTypePeriod.text = paymentType!!.period!!.name
+        binding.tvPaymentPeriodDay.text = paymentType!!.periodDay.toString()
     }
 
     private fun itemClick(position: Int) {

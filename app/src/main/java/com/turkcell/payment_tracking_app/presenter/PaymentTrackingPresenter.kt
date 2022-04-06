@@ -15,4 +15,5 @@ interface PaymentTrackingPresenter {
     fun onAddPaymentTypeButtonClick(paymentType: PaymentType?, title: String, period: Period, periodDay: String, intent: Intent, context: Context) : Boolean
     fun onPaymentItemClick(position: Int, payments: ArrayList<Payment>, adapter: PaymentAdapter, context: Context)
     fun onDeletePaymentCondition(paymentType: PaymentType)
+    fun onResultPaymentAdded(paymentType: PaymentType, updatedPaymentType: PaymentType, payments: ArrayList<Payment>)
 }
